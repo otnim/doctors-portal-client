@@ -1,8 +1,11 @@
 import { format } from 'date-fns';
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../../contexts/AuthProvider';
 
 const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
     const { name, slots } = treatment; // appointmentOption er different name deya hoyeche 'treatment'
+    const {user} = useContext(AuthContext);
+    //console.log("mail: ", user.email);
 
     const handleBooking = event => {
         event.preventDefault();
@@ -25,6 +28,7 @@ const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
         //once data is sent then set treatment 'null' to close the modal
         setTreatment(null);
     }
+
     return (
         <>
             <input type="checkbox" id="booking-modal" className="modal-toggle" />
@@ -52,7 +56,7 @@ const BookingModal = ({ treatment, setTreatment, selectedDate }) => {
                             <input type="tel" name="phone" placeholder="Phone Number" className="input input-bordered" required/>
                         </div>
                         <div className="form-control">
-                            <input type="email" name="email" placeholder="Email" className="input input-bordered" />
+                            <input type="email" name="email" value={user.email} className="input input-bordered" disabled />
                         </div>
 
                         <div className="form-control mt-6">

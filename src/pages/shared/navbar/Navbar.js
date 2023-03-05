@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../../contexts/AuthProvider';
 
 const Navbar = () => {
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleLogout = event => {
+        event.preventDefault();
+        logOut()
+            .then(() => {
+                //alert('Sign-out successful.')
+            })
+            .catch(error => {
+                alert(error.message);
+            })
+    }
+    const handleToggleTheme = event => {
+        event.preventDefault();
+        console.log("Hello");
+    }
     const menuItems = <>
         <li> <Link to='/'> Home </Link></li>
         <li> <Link to='/about'> About </Link></li>
         <li> <Link to='/appointment'> Appointment </Link></li>
         <li> <Link to='/reviews'> Reviews </Link></li>
         <li> <Link to='/contact-us'> Contact Us </Link></li>
-        <li> <Link to='/login'> Login </Link></li>
+        <li> <Link to='/dashboard/my-appointment'> Dashboard </Link> </li>
+        {
+            user?.uid ? <>
+                <li> <button onClick={handleLogout}> Logout </button> </li>
+            </>
+                : <li> <Link to='/login'> Login </Link></li>
+        }
+        <label className="cursor-pointer label">
+            <input type="checkbox" className="toggle toggle-base" onClick={handleToggleTheme} />
+        </label>
     </>
     return (
-        <div className="navbar bg-base-100 flex justify-between">
+        <div className="navbar flex justify-between">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -22,7 +48,7 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <Link to="/" className="btn btn-ghost normal-case text-xl text-accent"> Doctors Portal </Link>
-                
+
             </div>
             <div className="navbar-center hidden lg:flex mr-[90px]">
                 <ul className="menu menu-horizontal px-1">
